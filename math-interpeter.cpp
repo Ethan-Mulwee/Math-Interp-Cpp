@@ -1,15 +1,16 @@
 #include <iostream>
 #include <cstring>
+#include <string>
 
 template <typename T> struct Stack {
     T arr[255];
     int top = -1;
-    
+
     void push(T num) {
         top++;
         arr[top] = num;
     }
-    
+
     T pop() {
        return arr[top--];
     }
@@ -52,7 +53,7 @@ int getOperatorPrecedence(char op) {
             break;
         case '/':
             return 2;
-            break;        
+            break;
         case '*':
             return 2;
             break;
@@ -131,9 +132,10 @@ int evaluate_expression(const char *expression) {
 int main() {
     const char* expression = "142+20*(40+5*3)+4*79/4-2";
 
+    std::string test;
+    std::cin >> test;
 
-
-    std::cout << evaluate_expression(expression) << "\n";
+    std::cout << evaluate_expression(test.c_str()) << "\n";
 
 
 }
