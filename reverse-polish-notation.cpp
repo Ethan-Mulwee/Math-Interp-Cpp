@@ -3,7 +3,7 @@
 
 int main() {
     // 8-(80/((2+3)*4)) = 8-80/(4(2+3))
-    const char* input = "8 80 4 2 3 + * / -";
+    const char* expression = "8 80 4 2 3 + * / -";
 
     
     struct Stack {
@@ -23,11 +23,12 @@ int main() {
     Stack stack;
     int i = 0;
 
-    while (i < strlen(input)) {
-        char symbol = input[i];
+    while (i < strlen(expression)) {
+        char symbol = expression[i];
         if (isalnum(symbol)) {
+            // parse full number
             int numberLength = 0;
-            while(input[i] != ' ') {
+            while(expression[i] != ' ') {
                 i++;
                 numberLength++;
             }
@@ -35,10 +36,9 @@ int main() {
             char number[numberLength];
             number[numberLength] = '\0';
             for (int j = 0; j < numberLength; j++) {
-                number[j] = input[(i-numberLength)+j];
+                number[j] = expression[(i-numberLength)+j];
             }
 
-            // std::cout << "pushing number: " << number << "\n";
             stack.push(atoi(number));
             i++;
         } else switch(symbol) {
