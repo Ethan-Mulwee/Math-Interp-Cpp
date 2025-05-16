@@ -33,7 +33,7 @@ int main() {
                 numberLength++;
             }
 
-            char number[numberLength];
+            char number[numberLength+1];
             number[numberLength] = '\0';
             for (int j = 0; j < numberLength; j++) {
                 number[j] = expression[(i-numberLength)+j];
