@@ -3,15 +3,19 @@
 
 template <typename T> struct Stack {
     T arr[255];
-    int top = 0;
+    int top = -1;
     
     void push(T num) {
-        arr[top] = num;
         top++;
+        arr[top] = num;
     }
     
     T pop() {
-       return arr[--top]; 
+       return arr[top--];
+    }
+
+    T getTop() {
+        return arr[top];
     }
 };
 
@@ -35,7 +39,7 @@ int parseNumber(const char* expression, int &expressionPointer) {
 }
 
 bool isaoperator(char op) {
-    return (op == '+' || op == '-' || op == '*' || op == '/' || op == ')' || op == '(');
+    return (op == '+' || op == '-' || op == '*' || op == '/');
 }
 
 int getOperatorPrecedence(char op) {
@@ -51,6 +55,29 @@ int getOperatorPrecedence(char op) {
             break;        
         case '*':
             return 2;
+            break;
+        default:
+            return 0;
+            break;
+    }
+}
+
+void evaluateStack(Stack<int> &numberStack, Stack<char> &operatorStack) {
+    int a = numberStack.pop();
+    int b = numberStack.pop();
+    char op = operatorStack.pop();
+    switch (op) {
+        case '+':
+            numberStack.push(a+b);
+            break;
+        case '-':
+            numberStack.push(b-a);
+            break;
+        case '*':
+            numberStack.push(a*b);
+            break;
+        case '/':
+            numberStack.push(b/a);
             break;
     }
 }
@@ -74,31 +101,45 @@ int main() {
         // if is operator evaluate operators until either
         else if (isaoperator(symbol)) {
             // The operator cellar is empty
-            if (operatorStack.top == 0) {
-                operatorStack.push(symbol);
-                i++;
-            }
             // The top of operator cellar is an open parenthesis
-            if (operatorStack.arr[operatorStack.top] == '(') {
-                i++;
+            // The precedence of the operator at the top of the operator cellar is lower than the precedence of X
+            while(!(operatorStack.top == 0 || operatorStack.getTop() == '(' || getOperatorPrecedence(operatorStack.getTop()) < getOperatorPrecedence(symbol))) {
+                evaluateStack(numberStack, operatorStack);
             }
+            operatorStack.push(symbol);
             i++;
-        } else {
+        }
+        // If X is an open parenthesis, push X onto the operator cellars
+        else if (symbol == '(') {
+            operatorStack.push(symbol);
+            i++;
+        }
+
+        else if (symbol == ')') {
+            while (operatorStack.getTop() != '(') {
+                evaluateStack(numberStack, operatorStack);
+            }
+            operatorStack.pop();
             i++;
         }
     }
-
-    // print out number stack at the end
-    std::cout << "numberStack: ";
-    while (numberStack.top != 1) {
-        std::cout << numberStack.pop() << ", ";
+    while (operatorStack.top != -1) {
+        evaluateStack(numberStack, operatorStack);
     }
-    std::cout << numberStack.pop() << "\n";
 
-    // print out operator stack at the ned
-    std::cout << "operatorStack: ";
-    while (operatorStack.top != 1) {
-        std::cout << operatorStack.pop() << ", ";
-    }
-    std::cout << operatorStack.pop() << "\n";
+    std::cout << numberStack.pop();
+
+    // // print out number stack at the end
+    // std::cout << "numberStack: ";
+    // while (numberStack.top != 0) {
+    //     std::cout << numberStack.pop() << ", ";
+    // }
+    // std::cout << numberStack.pop() << "\n";
+    //
+    // // print out operator stack at the ned
+    // std::cout << "operatorStack: ";
+    // while (operatorStack.top != 0) {
+    //     std::cout << operatorStack.pop() << ", ";
+    // }
+    // std::cout << operatorStack.pop() << "\n";
 }

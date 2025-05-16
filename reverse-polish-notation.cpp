@@ -8,15 +8,15 @@ int main() {
     
     struct Stack {
         int arr[100];
-        int top = 0;
+        int top = -1;
         
         void push(int num) {
-            arr[top] = num;
             top++;
+            arr[top] = num;
         }
         
         int pop() {
-           return arr[--top]; 
+            return arr[top--];
         }
     };
     
@@ -80,7 +80,7 @@ int main() {
         }
     }
 
-    while (stack.top != 0) {
+    while (stack.top != -1) {
         std::cout << stack.pop() << "\n";
     }
 }
