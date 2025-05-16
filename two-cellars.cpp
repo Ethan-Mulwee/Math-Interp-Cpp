@@ -90,7 +90,7 @@ int evaluate_expression(const char *expression) {
     while (i < strlen(expression)) {
         char symbol = expression[i];
         // if is number place in number cellar
-        if (isalnum(symbol)) {
+        if (isdigit(symbol)) {
             /* NOTE: parseNumber modifies i to be the index of the next char after the number
             I was too lazy to bundle the exit point into a struct */
             int number = parseNumber(expression, i);

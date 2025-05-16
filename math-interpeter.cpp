@@ -91,7 +91,7 @@ int evaluate_expression(const char *expression) {
     while (i < strlen(expression)) {
         char symbol = expression[i];
         // if is number place in number cellar
-        if (isalnum(symbol)) {
+        if (isdigit(symbol)) {
             /* NOTE: parseNumber modifies i to be the index of the next char after the number
             I was too lazy to bundle the exit point into a struct */
             int number = parseNumber(expression, i);
@@ -121,6 +121,11 @@ int evaluate_expression(const char *expression) {
             operatorStack.pop();
             i++;
         }
+
+        else {
+            std::cout << "invalid syntax \n";
+            return 0;
+        }
     }
     while (operatorStack.top != -1) {
         evaluateStack(numberStack, operatorStack);
@@ -132,10 +137,16 @@ int evaluate_expression(const char *expression) {
 int main() {
     const char* expression = "142+20*(40+5*3)+4*79/4-2";
 
+    input:
     std::string test;
     std::cin >> test;
+    if (test == "exit") {
+        goto exit;
+    }
 
     std::cout << evaluate_expression(test.c_str()) << "\n";
+    goto input;
 
-
+    exit:
+    {}
 }
